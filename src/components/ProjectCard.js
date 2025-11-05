@@ -6,6 +6,8 @@ import Card from 'react-bootstrap/Card';
 import Col from 'react-bootstrap/Col';
 import Badge from 'react-bootstrap/Badge';
 
+import ReactGA from "react-ga4";
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { fas } from '@fortawesome/free-solid-svg-icons'
@@ -15,18 +17,26 @@ library.add(fas)
 const ProjectCard = ({ project }) => {
     const { name, author, stars, language, link, lastUpdated, platforms, categories, description } = project;
 
+    const handleCardClick = (label, type) => {
+        ReactGA.event({
+            category: 'Project',
+            action: `Clicked ${type} Link`,
+            label: label
+        });
+    };
+
     return (
         <Col md={6} lg={4} className="mb-4">
             <Card className="h-100 shadow-sm">
                 <Card.Header>
-                    <Card.Link href={link} target="_blank" rel="noopener noreferrer" className="fw-bold text-decoration-none">
+                    <Card.Link href={link} onClick={() => handleCardClick(name, "Project")} target="_blank" rel="noopener noreferrer" className="fw-bold text-decoration-none">
                         {name}<FontAwesomeIcon icon="fa-solid fa-arrow-up-right-from-square" className="ms-2" />
                     </Card.Link>
                 </Card.Header>
                 <Card.Body className="d-flex flex-column">
                     <Card.Text>{description}</Card.Text>
                     <Card.Subtitle className="mt-auto mb-2 text-muted small">
-                        By: <Card.Link href={`https://github.com/${author}`} target="_blank" rel="noopener noreferrer" className="text-decoration-none">{author}</Card.Link>
+                        By: <Card.Link href={`https://github.com/${author}`} onClick={() => handleCardClick(author, "Author")} target="_blank" rel="noopener noreferrer" className="text-decoration-none">{author}</Card.Link>
                     </Card.Subtitle>
                     <Card.Text className="text-muted small">
                         <FontAwesomeIcon icon="fa-solid fa-code" /> {language}
