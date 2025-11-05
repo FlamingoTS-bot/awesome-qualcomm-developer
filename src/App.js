@@ -8,6 +8,8 @@ import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import Button from 'react-bootstrap/Button';
 
+import ReactGA from "react-ga4";
+
 import ProjectCarousel from './components/ProjectCarousel';
 import ProjectList from './components/ProjectList';
 
@@ -30,6 +32,14 @@ function App() {
     const allPlatforms = [...new Set(projects.flatMap(p => p.platforms))].sort();
     const allCategories = [...new Set(projects.flatMap(p => p.categories))].sort();
 
+    const handleLinkClick = (name) => {
+        ReactGA.event({
+            category: "Navigation",
+            action: "Clicked on link",
+            label: name
+        });
+    };
+
     useEffect(() => {
         const fetchProjects = async () => {
             try {
@@ -48,6 +58,9 @@ function App() {
         };
 
         fetchProjects();
+
+        ReactGA.initialize("G-ECVJXC37L5");
+        ReactGA.send({ hitType: "pageview", page: window.location.pathname + window.location.search });
     }, []);
 
     if (loading) {
@@ -113,7 +126,7 @@ function App() {
                                 </NavDropdown>
                             </Nav>
                             <Navbar.Text>
-                                <Button variant="info" href="https://github.com/qualcomm/awesome-qualcomm-developer/blob/main/CONTRIBUTING.md" target="_blank">
+                                <Button variant="info" href="https://github.com/qualcomm/awesome-qualcomm-developer/blob/main/CONTRIBUTING.md" onClick={() => { handleLinkClick("Contributing"); }} target="_blank">
                                     Add your awesome project!
                                 </Button>
                             </Navbar.Text>
@@ -127,12 +140,12 @@ function App() {
                     <ProjectList projects={projects} />
                     <footer className="text-center mt-4 mb-4 border-top">
                         <p className="mt-3 mb-3">
-                            Brought to you by <a href="https://qualcomm.com/developer" target="_blank" rel="noreferrer">Qualcomm</a>
+                            Brought to you by <a href="https://qualcomm.com/developer" onClick={() => { handleLinkClick("Qualcomm Developer"); }} target="_blank" rel="noreferrer">Qualcomm</a>
                         </p>
                         <small>
                             <b>Disclaimer</b>: This site is a community-curated listing of third-party projects.<br />
                             Qualcomm does not own or maintain these projects and is not responsible for their content. <br />
-                            <a href="https://github.com/qualcomm/awesome-qualcomm-developer?tab=readme-ov-file#disclaimer" target="_blank" rel="noreferrer">Learn more.</a>
+                            <a href="https://github.com/qualcomm/awesome-qualcomm-developer?tab=readme-ov-file#disclaimer" onClick={() => { handleLinkClick("Disclaimer"); }} target="_blank" rel="noreferrer">Learn more.</a>
                         </small>
                     </footer>
                 </Container>
