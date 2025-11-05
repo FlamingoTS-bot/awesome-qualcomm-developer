@@ -7,6 +7,8 @@ import Col from 'react-bootstrap/Col';
 import Carousel from 'react-bootstrap/Carousel';
 import Card from 'react-bootstrap/Card';
 
+import ReactGA from "react-ga4";
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { fas } from '@fortawesome/free-solid-svg-icons'
@@ -14,10 +16,16 @@ import { fab } from '@fortawesome/free-brands-svg-icons'
 
 library.add(fas, fab)
 
-
-
 const ProjectCarousel = ({ projects }) => {
     const showcaseProjects = projects.filter(p => p.isShowcase);
+
+    const handleLinkClick = (category, label, type) => {
+        ReactGA.event({
+            category: category,
+            action: `Clicked ${type} Link`,
+            label: label
+        });
+    };
 
     const quickLinks = [
         { name: 'Qualcomm on GitHub', url: 'https://github.com/Qualcomm', icon: 'fa-brands fa-github' },
@@ -41,19 +49,19 @@ const ProjectCarousel = ({ projects }) => {
                                 <Card className="shadow-sm pb-4">
                                     <Card.Body>
                                         <Card.Title className="mb-2">
-                                            <Card.Link href={project.link} target="_blank" rel="noopener noreferrer" className="fw-bold text-decoration-none small">
+                                            <Card.Link href={project.link} onClick={() => { handleLinkClick("Project", project.name, "Project"); }} target="_blank" rel="noopener noreferrer" className="fw-bold text-decoration-none small">
                                                 {project.name}<FontAwesomeIcon icon="fa-solid fa-arrow-up-right-from-square" className="ms-2" />
                                             </Card.Link>
                                         </Card.Title>
                                         <Card.Subtitle className="mb-2 text-muted small">
                                             By:&nbsp;
-                                            <Card.Link href={`https://github.com/${project.author}`} target="_blank" rel="noopener noreferrer" className="text-decoration-none">
+                                            <Card.Link href={`https://github.com/${project.author}`} onClick={() => { handleLinkClick("Project", project.author, "Author"); }} target="_blank" rel="noopener noreferrer" className="text-decoration-none">
                                                 {project.author}
                                             </Card.Link>
                                         </Card.Subtitle>
                                         <Card.Text className="small">{project.description}</Card.Text>
                                         <Card.Text>
-                                            <a href={project.link} target="_blank" rel="noopener noreferrer" className="card-link">
+                                            <a href={project.link} onClick={() => { handleLinkClick("Project", project.name, "Project"); }} target="_blank" rel="noopener noreferrer" className="card-link">
                                                 View Project
                                             </a>
                                         </Card.Text>
@@ -68,7 +76,7 @@ const ProjectCarousel = ({ projects }) => {
                     <ul className="list-unstyled">
                         {quickLinks.map(link => (
                             <li key={link.name}>
-                                <a href={link.url} target="_blank" rel="noopener noreferrer" className=" text-decoration-none">
+                                <a href={link.url} onClick={() => { handleLinkClick("Quick Link", link.name, "Quick"); }} target="_blank" rel="noopener noreferrer" className=" text-decoration-none">
                                     <FontAwesomeIcon icon={link.icon} className="ms-2" /> {link.name}
                                 </a>
                             </li>

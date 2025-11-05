@@ -9,6 +9,8 @@ import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
 import Button from 'react-bootstrap/Button';
 
+import ReactGA from 'react-ga4'
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { fas } from '@fortawesome/free-solid-svg-icons'
@@ -53,6 +55,13 @@ const ProjectFilter = ({ allProjects }) => {
         if (search) params.set('search', search);
         params.set('sort', sort);
         params.set('direction', direction);
+
+        ReactGA.event({
+            category: "Filter",
+            action: "Update Filter",
+            label: `Platforms: ${platforms.join(', ')}, Categories: ${categories.join(', ')}, Search: ${search}, Sort: ${sort}, Direction: ${direction}`
+        })
+
         navigate(`/?${params.toString()}`);
     };
 
@@ -64,6 +73,13 @@ const ProjectFilter = ({ allProjects }) => {
         } else {
             newPlatforms = [...currentPlatforms, platform];
         }
+
+        ReactGA.event({
+            category: "Filter",
+            action: "Select Platform",
+            label: platform
+        })
+
         updateFilter(newPlatforms, currentCategories);
     };
 
@@ -80,6 +96,13 @@ const ProjectFilter = ({ allProjects }) => {
         } else {
             newCategories = [...currentCategories, category];
         }
+
+        ReactGA.event({
+            category: "Filter",
+            action: "Select Category",
+            label: category
+        })
+
         updateFilter(currentPlatforms, newCategories);
     };
 
