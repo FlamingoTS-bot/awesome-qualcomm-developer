@@ -62,7 +62,7 @@ const ProjectFilter = ({ allProjects }) => {
             label: `Platforms: ${platforms.join(', ')}, Categories: ${categories.join(', ')}, Search: ${search}, Sort: ${sort}, Direction: ${direction}`
         })
 
-        navigate(`/?${params.toString()}`);
+        navigate(`${window.location.pathname}?${params.toString()}`);
     };
 
     // Toggle platform selection
