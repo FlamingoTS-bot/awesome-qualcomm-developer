@@ -1,0 +1,117 @@
+# FaceDetection demo in WOS
+## Preparatory work(Env Setup)
+
+
+1. Download QNN SDK 2.34.0.250424 from
+
+```bash
+ https://softwarecenter.qualcomm.com/catalog/item/qualcomm_ai_engine_direct
+```
+
+2. Install QNN SDK
+
+```bash
+ ./envsetup.sh
+```
+- Install Python dependencies
+```bash
+${QNN_SDK_ROOT}/bin/check-python-dependency
+```
+- Install Linux build tools
+  
+```bash
+sudo bash ${QNN_SDK_ROOT}/bin/check-linux-dependency.sh
+```
+
+- Verify that dependencies and the environment are functioning properly.
+```bash
+/opt/qcom/aistack/qairt/ 2.34.0.250424/bin/envcheck -c
+```
+## Start running(Model transformation)
+1. Model Conversion
+
+```bash
+python bin\arm64x-windows-msvc\qnn-onnx-converter -i C:\work\face\FaceDetection\models\yolov8n-face.onnx -o C:\work\face\FaceDetection\models\yolov8n-face.cpp --input_list C:\work\face\FaceDetection\input_list --input_dim 'images' 1,3,640,640
+```
+You will obtain the.cpp and the.bin files
+
+```bash
+models\yolov8n-face.cpp
+models\yolov8n-face.bin
+```
+2. Model compilation
+
+```bash
+python bin\aarch64-windows-msvc\qnn-model-lib-generator -c C:\work\face\FaceDetection\models\yolov8n-face.cpp -b C:\work\face\FaceDetection\models\yolov8n-face.bin -o C:\work\face\FaceDetection\models\aarch64-windows-msvc\ -t windows-aarch64
+```
+You will obtain the .dll files
+```bash
+models\aarch64-windows-msvc\ARM64\yolov8n-face.dll
+```
+
+3. Inference on WOS
+
+```bash
+bin\aarch64-windows-msvc\qnn-net-run --model C:\work\face\FaceDetection\models\aarch64-windows-msvc\ARM64\yolov8n-face.dll --backend QnnHtp.dll --input_list C:\work\face\FaceDetection\input_list --output_dir C:\work\face\FaceDetection\models\aarch64-windows-msvc\aarch64-windows-msvc --profiling_level basic
+```
+You will obtain the log files
+
+4. Inference Results
+```bash
+bin\aarch64-windows-msvc\qnn-profile-viewer.exe --input_log C:\work\face\FaceDetection\models\aarch64-windows-msvc\aarch64-windows-msvc\qnn-profiling-data_0.log
+```
+
+
+
+
+<img width="553" height="275" alt="图片" src="https://github.com/user-attachments/assets/3c3a2e3a-08f1-4214-be6b-98db0a97e18d" />
+
+5. Start the visual test
+- image test1
+```bash
+Run .\main.py --imgpath test_images/test.jpg
+```
+the origin image
+
+
+
+<img width="553" height="311" alt="图片" src="https://github.com/user-attachments/assets/44b57f19-b6cb-4d2b-af63-27f4000b3b2d" />
+
+
+
+
+
+Visualization result
+
+<img width="553" height="311" alt="图片" src="https://github.com/user-attachments/assets/dc58cf8e-5936-40ad-a0ce-b19574d8dfbf" />
+
+- image test2
+
+```bash
+Run .\main.py --imgpath test_images/test2.jpg
+```
+the origin image
+
+<img width="554" height="369" alt="图片" src="https://github.com/user-attachments/assets/e303ffa3-03c7-4677-9ff1-26f0c71a1bc8" />
+
+
+Visualization result
+
+
+<img width="554" height="369" alt="图片" src="https://github.com/user-attachments/assets/a8f1fb19-ab1d-4eb4-b215-360798ce06b4" />
+
+
+
+- camera test
+```bash
+Run .\main_camera.py --input camera --source 0
+```
+
+
+
+![tinywow_46562ccbb36104330591da16f45145f0_84572955](https://github.com/user-attachments/assets/46ff8002-6287-4d50-8059-f654e02f1df0)
+
+
+
+
+
