@@ -173,4 +173,29 @@
             "Edge AI & IoT"
         ]
     }
+    ,
+{
+    "name": "FaceDetection",
+    "link": "https://github.com/ThunderSoft-XA/Facedetection",
+    "description": "Demonstrates face detection running on Qualcomm platform using QNN SDK.",
+    "author": "FlamingoTS",
+    "lastUpdated": "2025-9-26",
+    "stars": 0,
+    "language": "c++",
+    "tags": [
+        "qnn",
+        "face detection",
+        "ai demo"
+    ],
+    "platforms": [
+        "6490 RB3G2 LU "
+    ],
+    "isShowcase": true,
+    "categories": [
+        "AI & Machine Learning",
+        "Edge AI & IoT",
+        "Computer Vision"
+    ]
+}
+
 ]
